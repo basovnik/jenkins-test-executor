@@ -236,8 +236,16 @@ public final class MavenCli {
 	public int run() throws Exception {
 
 		final ProcessBuilder processBuilder = new ProcessBuilder(generateCommand());
-		processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-		processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+		//processBuilder.inheritIO();
+		File fout = new File("mvn-out.log");
+		fout.createNewFile();
+		File ferr = new File("mvn-err.log");
+		ferr.createNewFile();
+		File fin = new File("mvn-in.log");
+		fin.createNewFile();
+		processBuilder.redirectOutput(fout);
+		processBuilder.redirectError(ferr);
+		processBuilder.redirectInput(fin);
 		processBuilder.environment().putAll(System.getenv());
 		if (javaHome != null) {
 			processBuilder.environment().put("JAVA_HOME", javaHome.getAbsolutePath());
